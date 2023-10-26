@@ -1,12 +1,14 @@
-import { useState, useRef } from "react";
-// import GoogleButton from "react-google-button";
+import { useState, useRef, useContext } from "react";
 import classes from "./AuthForm.module.css";
+import AuthContext from "../../store/auth-context";
 
 const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
+
+  const authCtx = useContext(AuthContext);
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -36,9 +38,9 @@ const AuthForm = () => {
       });
       setIsLoading(false);
       if (response.ok) {
-        console.log(response,"Registration successful");
+        console.log(response, "Registration successful");
         const data = await response.json();
-        console.log(data);
+        authCtx.login(data.idToken);
       } else {
         let errorMessage = "Authentication failed!";
         // if (data && data.error && data.error.message) {
@@ -87,7 +89,6 @@ const AuthForm = () => {
           >
             {isLogin ? "Create new account" : "Login with existing account"}
           </button>
-          {/* <GoogleButton className="g-btn" type="dark" /> */}
         </div>
       </form>
     </section>

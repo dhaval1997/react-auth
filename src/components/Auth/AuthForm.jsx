@@ -1,12 +1,14 @@
 import { useState, useRef, useContext } from "react";
 import classes from "./AuthForm.module.css";
 import AuthContext from "../../store/auth-context";
+import { useHistory } from "react-router-dom";
 
 const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
+  const history = useHistory();
 
   const authCtx = useContext(AuthContext);
 
@@ -41,6 +43,7 @@ const AuthForm = () => {
         console.log(response, "Registration successful");
         const data = await response.json();
         authCtx.login(data.idToken);
+        history.replace("/");
       } else {
         let errorMessage = "Authentication failed!";
         // if (data && data.error && data.error.message) {
